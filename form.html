@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>填写信息</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <h2>请填写您的信息</h2>
+    <form id="dataForm">
+        <label for="name">姓名:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">电子邮件:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <button type="submit">提交</button>
+    </form>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        document.getElementById('dataForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Include Telegram user info
+            data.user_id = tg.initDataUnsafe?.user?.id || "N/A";
+            data.username = tg.initDataUnsafe?.user?.username || "N/A";
+            data.first_name = tg.initDataUnsafe?.user?.first_name || "N/A";
+
+            // Send data to bot server
+            fetch("https://your-render-url.com/submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.status === "success") {
+                      alert("提交成功！");
+                      tg.close();
+                  }
+              })
+              .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>
