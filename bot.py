@@ -22,7 +22,7 @@ async def start(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
 
     keyboard = [
-        [KeyboardButton("填写信息", web_app=WebAppInfo(url="https://your-username.github.io/Telegrambot/form.html"))]
+        [KeyboardButton("填写信息", web_app=WebAppInfo(url="https://hourtmeiching.github.io/Testbot/form.html"))]
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
